@@ -3,11 +3,19 @@ Build all of your functions for displaying and gathering information below (GUI)
 */
 
 // app is the function called to start the entire application
+
+
+
+
+
+
+
+
 function app(people){
   var searchType = promptFor("Do you know the name of the person you are looking for? Enter 'yes' or 'no'", yesNo).toLowerCase();
   switch(searchType){
     case 'yes':
-    // TODO: search by name
+    searchByName(people)
     break;
     case 'no':
     searchByTraits(people);
@@ -21,7 +29,7 @@ function app(people){
 
 function searchByTraits(people) {
   let userSearchChoice = prompt("What would you like to search by? 'height', 'weight', 'eye color', 'gender', 'age', 'occupation'.");
-  let filteredPeople;
+  let filteredPeople = [];
 
   switch(userSearchChoice) {
     case "height":
@@ -48,6 +56,13 @@ function searchByTraits(people) {
       break;
   }  
 
+if (filteredPeople.length > 1)
+{
+  displayPeople(filteredPeople);
+
+}
+
+else
   let foundPerson = filteredPeople[0];
 
   mainMenu(foundPerson, people);
@@ -55,17 +70,16 @@ function searchByTraits(people) {
 }
 
 function searchByWeight(people) {
-  let userInputWeight = prompt("How much does the person weight?");
-
-  let newArray = people.filter(function (el) {
+  let userInputWeight = prompt("How much does the person weight?");         //Iam using this function for testing how to list multiple results
+ let newArray = people.filter(function (el) {
     if(el.weight == userInputWeight) {
       return true;
     }
     // return true if el.height matches userInputHeight
   });
-
   return newArray;
 }
+
 
 function searchByHeight(people) {
   let userInputHeight = prompt("What is the person's height?");
@@ -98,11 +112,9 @@ function searchByEyeColor(people) {
     if(el.eyeColor == userInputEyeColor) {
       return true;
     }
-    // return true if el.height matches userInputHeight
-  });
-  
+});
 
-  return newArray;
+ 
 }
 
 function searchByGender(people) {
@@ -176,9 +188,8 @@ function searchByName(people){
 
 // alerts a list of people
 function displayPeople(people){
-  alert(people.map(function(person){
-    return person.firstName + " " + person.lastName;
-  }).join("\n"));
+  alert(people.map(function(person){return person.firstName + " " + person.lastName;}).join("\n"));
+  promptFor("Do you see the person your looking for?",yesNo).toLowerCase();
 }
 
 function displayPerson(person){
@@ -208,3 +219,19 @@ function yesNo(input){
 function chars(input){
   return true; // default validation only
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

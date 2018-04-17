@@ -1,4 +1,4 @@
-/*
+
 Build all of your functions for displaying and gathering information below (GUI).
 */
 
@@ -192,31 +192,4 @@ function displayPeople(people){
     app(people); // restart app
     break;
   }
-}
-
-function displayPerson(person){
-  // print all of the information about a person:
-  // height, weight, age, name, occupation, eye color.
-  var personInfo = "First Name: " + person.firstName + "\n";
-  personInfo += "Last Name: " + person.lastName + "\n";
-  // TODO: finish getting the rest of the information to display
-  alert(personInfo);
-}
-
-// function that prompts and validates user input
-function promptFor(question, valid){
-  do{
-    var response = prompt(question).trim();
-  } while(!response || !valid(response));
-  return response;
-}
-
-// helper function to pass into promptFor to validate yes/no answers
-function yesNo(input){
-  return input.toLowerCase() == "yes" || input.toLowerCase() == "no";
-}
-
-// // helper function to pass in as default promptFor validation
-function chars(input){
-  return true; // default validation only
 }

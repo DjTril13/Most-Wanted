@@ -29,6 +29,8 @@ function searchByTraits(people) {
   let userSearchChoice = prompt("What would you like to search by? 'height', 'weight', 'eye color', 'gender', 'age', 'occupation'.");
   let filteredPeople;
 
+ // if (peopleWithTraits is not equal to undefined run this function again with subbing people of with traits instead of people ).   ++++++This is how i want to loop through a second time
+
   switch(userSearchChoice) {
     case "height":
 		filteredPeople = searchByHeight(people);
@@ -48,95 +50,68 @@ function searchByTraits(people) {
 	case "occupation":
 		filteredPeople = searchByOccupation(people);
 		break;
-    // so on and so forth
     default:
       alert("You entered an invalid search type! Please try again.");
       searchByTraits(people);
-      break;
+      break;}
 
-  }
+ if (filteredPeople.length > 1){
+ displayPeople(filteredPeople);}
 
- 
-
-if (filteredPeople.length > 1){
-  displayPeople(filteredPeople);
-}
 else{
   let foundPerson = filteredPeople[0];
-  mainMenu(foundPerson, people);
+  mainMenu(foundPerson, people);}}
 
+
+function displayPeople(people){
+  alert(people.map(function(person){return person.firstName + " " + person.lastName;}).join("\n"));
+ let searchType = promptFor("Do you see the person your looking for?",yesNo).toLowerCase();
+ switch(searchType){
+    case 'yes':
+    searchByName(people)
+    break;
+    case 'no':
+    searchByTraits(people);
+    break;
+    // default:
+    // alert("Wrong! Please try again, following the instructions dummy. :)");         !!! THIS DOESNT WORK
+    // app(people); // restart app
+    // break;
+  }
+  return people
 }
-}
+
 function searchByWeight(people) {
-  let userInputWeight = prompt("How much does the person weight?");         //Iam using this function for testing how to list multiple results
- let newArray = people.filter(function (el) {
-    if(el.weight == userInputWeight) {
-      return true;
-    }
-    // return true if el.height matches userInputHeight
-  });
+  let userInputWeight = prompt("How much does the person weight?");         // I am using this function for testing how to list multiple results
+  let newArray = people.filter(function (el){if(el.weight == userInputWeight) {return true}});
   return newArray;
-}
-
+  }
 
 function searchByHeight(people) {
   let userInputHeight = prompt("What is the person's height?");
+  let newArray = people.filter(function (el) {if(el.height == userInputHeight){return true}});
+  return newArray;}
 
-  let newArray = people.filter(function (el) {
-    if(el.height == userInputHeight) {
-      return true;
-    }
-    // return true if el.height matches userInputHeight
-  });
-  
-  return newArray;
-
-}
 function searchByOccupation(people) {
   let userInputOccupation = prompt("What is the person's occupation?");
-
-  let newArray = people.filter(function (el) {
-    if(el.occupation == userInputOccupation) {
-      return true;
-    }
-    // return true if el.height matches userInputHeight
-  });
-  return newArray;
-}
+  let newArray = people.filter(function (el){if(el.occupation == userInputOccupation){return true}});
+  return newArray;}
 
 function searchByEyeColor(people) {
-  let userInputEyeColor = prompt("What is the person's eye color?");           // SHOULD all these functions be combined into one since they all do nearly the same thing. 
-
-  let newArray = people.filter(function (el) {
-    if(el.eyeColor == userInputEyeColor) {
-      return true;
-    }
-});
-}
+  let userInputEyeColor = prompt("What is the person's eye color?");                            // SHOULD all these functions be combined into one since they all do nearly the same thing. 
+  let newArray = people.filter(function (el){if(el.eyeColor == userInputEyeColor){return true}});
+  return newArray;}
 
 function searchByGender(people) {
   let userInputGender = prompt("What is the person's gender?");
-
-  let newArray = people.filter(function (el) {
-    if(el.gender == userInputGender) {
-      return true;
-    }
+  let newArray = people.filter(function (el) {if(el.gender == userInputGender) {return true;}});
+  return newArray;}
     // return true if el.height matches userInputHeight
-  });
-  
-  return newArray;
-}
 
 function searchByAge(people) {
   let userInputAge = prompt("What is the person's age?");
 //find dob, split by '/' for array, convert to numbers, subtract years
   let newArray = people.filter(function (el) {if(el.age == userInputAge) {return true;}}); 
-  return newArray;
-}
-
-function searchByWeight(people) {
-  let userInputWeight = prompt("How much does the person weigh?");
-  let newArray = people.filter(function(el){if(el.weight == userInputWeight) {return true;}});
   return newArray;
 }
 
@@ -147,12 +122,14 @@ function mainMenu(person, people){
     alert("Could not find that individual.");
     return app(people); // restart
   }
+
   var displayOption = prompt("Found " + person.firstName + " " + person.lastName + " . Do you want to know their 'info', 'family', or 'descendants'? Type the option you want or 'restart' or 'quit'");
   switch(displayOption){
     case "info":
 		displayPerson(person);
     break;
     case "family":
+
     // TODO: get person's family
 		findImmediateFamily(person, people);
     break;
@@ -180,7 +157,7 @@ var userLastName = promptFor("What is the person's last name?", chars);
 	});
 	mainMenu(newArray[0], people);
 }
-//*******************************************************
+
 function findImmediateFamily (person, people){
 //return persons immediate family - just full names
 let immediateFamily = [];
@@ -253,6 +230,7 @@ let spouse = ["Spouse: "];
 	}
 
 displayFamily(immediateFamily);
+
 }
 
 
@@ -260,8 +238,6 @@ displayFamily(immediateFamily);
 function displayFamily(people){
   alert(people.join("\n"));
 }
-//***************************************************************
-
 
 // alerts a list of people
 function displayPeople(people){
@@ -288,12 +264,25 @@ let searchType = promptFor("Do you see the person your looking for?",yesNo).toLo
   }
 }
 
+// // alerts a list of people
+// function displayPeople(people){
+//   alert(people.map(function(person){
+//     return person.firstName + " " + person.lastName;
+//   }).join("\n"));
+// }
+
+// alerts a list of people
+
+
 function displayPerson(person){
-  // print all of the information about a person:
   // height, weight, age, name, occupation, eye color.
   var personInfo = "First Name: " + person.firstName + "\n";
-  personInfo += "Last Name: " + person.lastName + "\n";
-personInfo += "ID: " + person.id + "\n";
+     personInfo += "Last Name: " + person.lastName + "\n";
+    personInfo += "Gender: " + person.gender + "\n";
+    personInfo += "Weight: " + person.weight + "\n";
+    personInfo += "Age: " + person.dob + "\n";
+    personInfo += "Eye Color : " + person.eyeColor + "\n";
+    personInfo += "Occupation: " + person.occupation + "\n";
 
   alert(personInfo);
 }

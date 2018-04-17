@@ -49,10 +49,27 @@ function searchByTraits(people) {
       alert("You entered an invalid search type! Please try again.");
       searchByTraits(people);
       break;
+
   }
+
+ 
+
+if (filteredPeople.length > 1){
+  displayPeople(filteredPeople);
+}
+else{
   let foundPerson = filteredPeople[0];
   mainMenu(foundPerson, people);
-}
+	}
+} 
+// function displayPeople(people){
+//   alert(people.map(function(person){return person.firstName + " " + person.lastName;}).join("\n"));
+//   let searchType = promptFor("Do you see the person your looking for?",yesNo).toLowerCase();
+//   switch (searchType)
+//   {search}
+
+//   }
+// }
 
 function searchByWeight(people) {
   let userInputWeight = prompt("How much does the person weigh?");
@@ -160,6 +177,30 @@ function displayPeople(people){
     return person.firstName + " " + person.lastName;
   }).join("\n"));
 }
+
+// alerts a list of people
+function displayPeople(people){
+  alert(people.map(function(person){return person.firstName + " " + person.lastName;}).join("\n"));
+
+ switch(searchType){
+    case 'yes':
+    searchByName(people)
+    break;
+    case 'no':
+    searchByTraits(people);
+    break;
+    default:
+    alert("Wrong! Please try again, following the instructions dummy. :)");
+    app(people); // restart app
+    break;
+
+  }
+
+  promptFor("Do you see the person your looking for?",yesNo).toLowerCase();
+
+
+}
+
 
 function displayPerson(person){
   // print all of the information about a person:

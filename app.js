@@ -213,11 +213,14 @@ function displayFamily(people){
 
 
 function displayPerson(person){
-  // print all of the information about a person:
   // height, weight, age, name, occupation, eye color.
   var personInfo = "First Name: " + person.firstName + "\n";
-  personInfo += "Last Name: " + person.lastName + "\n";
-personInfo += "ID: " + person.id + "\n";
+     personInfo += "Last Name: " + person.lastName + "\n";
+    personInfo += "Gender: " + person.gender + "\n";
+    personInfo += "Weight: " + person.weight + "\n";
+    personInfo += "Age: " + person.dob + "\n";
+    personInfo += "Eye Color : " + person.eyeColor + "\n";
+    personInfo += "Occupation: " + person.occupation + "\n";
 
   alert(personInfo);
 }

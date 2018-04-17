@@ -62,12 +62,20 @@ if (filteredPeople.length > 1)
 
 }
 
-else
+else{
   let foundPerson = filteredPeople[0];
 
   mainMenu(foundPerson, people);
-
 }
+
+// function displayPeople(people){
+//   alert(people.map(function(person){return person.firstName + " " + person.lastName;}).join("\n"));
+//   let searchType = promptFor("Do you see the person your looking for?",yesNo).toLowerCase();
+//   switch (searchType)
+//   {search}
+
+//   }
+// }
 
 function searchByWeight(people) {
   let userInputWeight = prompt("How much does the person weight?");         //Iam using this function for testing how to list multiple results
@@ -189,7 +197,19 @@ function searchByName(people){
 // alerts a list of people
 function displayPeople(people){
   alert(people.map(function(person){return person.firstName + " " + person.lastName;}).join("\n"));
-  promptFor("Do you see the person your looking for?",yesNo).toLowerCase();
+ switch(searchType){
+    case 'yes':
+    searchByName(people)
+    break;
+    case 'no':
+    searchByTraits(people);
+    break;
+    default:
+    alert("Wrong! Please try again, following the instructions dummy. :)");
+    app(people); // restart app
+    break;
+
+  }
 }
 
 function displayPerson(person){

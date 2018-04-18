@@ -87,7 +87,6 @@ function searchByWeight(people) {
   let newArray = people.filter(function (el){if(el.weight == userInputWeight) {return true}});
   return newArray;}
 
-
 function searchByHeight(people) {
   let userInputHeight = prompt("What is the person's height?");
   let newArray = people.filter(function (el) {if(el.height == userInputHeight){return true}});
@@ -109,35 +108,62 @@ function searchByGender(people) {
   return newArray;}
 
 function searchByAge(people) {
-
+  let newArray = []
   let userInputAge = prompt("What is the person's age?");
-  let newArray = people.filter(function (el) {if(calculateAge(people) == userInputAge) {return true;}}); 
-  return newArray;}
+  let arrayOfStringDates = people.map(function(people){return people.dob}); 
+  for (i = 0; i < arrayOfStringDates.length; i ++)
+    { let dobArray = arrayOfStringDates[i].split("/");
+      let dobMonth = parseInt(dobArray[0])
+      let dobDay = parseInt(dobArray[1])
+      let dobYear = parseInt(dobArray[2])
+      let date = new Date();
+      let todaysYear = date.getFullYear();
+      let todaysMonth = date.getMonth();
+      let todaysDay = date.getDay();
+      let age
+      if (todaysMonth > dobMonth) {age = todaysYear - dobYear}
+        else {if (todaysMonth < dobMonth){age =todaysYear - dobYear - 1}
+          else {if (todaysDay < dobDay){age =todaysYear - dobYear - 1}
+            else {age = todaysYear - dobYear}}};  
+            if (userInputAge == age)
+              {newArray.push(people[i]);}}
+          return newArray;}
 
 
 
+// function searchByAge2(people){
+//   let userInputAge = prompt("What is the person's age?");
 
 
-
-function calculateAge(people){
-  for (i = 0; i < people.length; i ++)
-  {
-let dob = people[i].dob;
-let newdob = dob.split("/");
-let pleaseWork = "11/2/33"
-//newdob = Number(newdob);
-console.log(pleaseWork)
-
-
-// for (i = 0; i =<3; i++)
-//  {parseInt(newdob)
-
-
-// let numbers = parseInt(newdob)
 // }
-  }}
+            
+      
 
 
+//  function calculaeDobNumbers(arrayOfStringDates)
+//  {
+//   let arrayOfStringDates = people.map(function(people){return people.dob}); 
+//     for (i = 0; i < arrayOfStringDates.length; i ++)
+//     { let dobArray = arrayOfStringDates[i].split("/");
+//       let dobMonth = parseInt(dobArray[0])
+//       let dobDay = parseInt(dobArray[1])
+//       let dobYear = parseInt(dobArray[2])
+//     }
+
+// function calculateAge(dobMonth,dobYear,dobDay)
+// {
+//       let date = new Date();
+//       let todaysYear = date.getFullYear();
+//       let todaysMonth = date.getMonth();
+//       let todaysDay = date.getDay();
+//       let age
+//       if (todaysMonth > dobMonth) {age = todaysYear - dobYear}
+//         else {if (todaysMonth < dobMonth){age =todaysYear - dobYear - 1}
+//           else {if (todaysDay < dobDay){age =todaysYear - dobYear - 1}
+//             else {age = todaysYear - dobYear}}};  
+//             let arrayAge = [age]
+//             return arrayAge
+// }
 
 
 

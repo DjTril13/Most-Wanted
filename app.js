@@ -109,14 +109,39 @@ function searchByGender(people) {
   return newArray;}
 
 function searchByAge(people) {
+
   let userInputAge = prompt("What is the person's age?");
-  let newArray = people.filter(function (el) {if(el.age == userInputAge) {return true;}}); 
+  let newArray = people.filter(function (el) {if(calculateAge(people) == userInputAge) {return true;}}); 
   return newArray;}
 
-function searchByWeight(people) {
-  let userInputWeight = prompt("How much does the person weigh?");
-  let newArray = people.filter(function(el){if(el.weight == userInputWeight) {return true;}});
-  return newArray;}
+
+
+
+
+
+function calculateAge(people){
+  for (i = 0; i < people.length; i ++)
+  {
+let dob = people[i].dob;
+let newdob = dob.split("/");
+let pleaseWork = "11/2/33"
+//newdob = Number(newdob);
+console.log(pleaseWork)
+
+
+// for (i = 0; i =<3; i++)
+//  {parseInt(newdob)
+
+
+// let numbers = parseInt(newdob)
+// }
+  }}
+
+
+
+
+
+
 
 // Menu function to call once you find who you are looking for
 function mainMenu(person, people){
@@ -213,7 +238,6 @@ function displayFamily(people){
 
 
 function displayPerson(person){
-  // height, weight, age, name, occupation, eye color.
   var personInfo = "First Name: " + person.firstName + "\n";
      personInfo += "Last Name: " + person.lastName + "\n";
     personInfo += "Gender: " + person.gender + "\n";

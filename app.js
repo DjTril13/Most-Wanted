@@ -68,7 +68,7 @@ function displayPeople(people){
  let searchType = promptFor("Do you see the person your looking for?",yesNo).toLowerCase();
  switch(searchType){
     case 'yes':
-    searchByName(people)
+    searchByName(people);
     break;
     case 'no':
     searchByTraits(people);
@@ -111,9 +111,10 @@ function searchByGender(people) {
 function searchByAge(people) {
   let userInputAge = prompt("What is the person's age?");
 //find dob, split by '/' for array, convert to numbers, subtract years
-  let newArray = people.filter(function (el) {if(el.age == userInputAge) {return true;}}); 
+  let newArray = people.filter(function (el) {if((calcAge(people)) == userInputAge) {return true;}}); 
   return newArray;
 }
+
 
 // Menu function to call once you find who you are looking for
 function mainMenu(person, people){
@@ -127,18 +128,17 @@ function mainMenu(person, people){
   switch(displayOption){
     case "info":
 		displayPerson(person);
-    break;
+		break;
     case "family":
-
-    // TODO: get person's family
 		findImmediateFamily(person, people);
-    break;
+		break;
     case "descendants":
-    // TODO: get person's descendants
-    break;
+		let descendantsResults = findDescendants(person, people);
+		displayFamily(descendantsResults);
+		break;
     case "restart":
-    app(people); // restart
-    break;
+		app(people); // restart
+		break;
     case "quit":
     return; // stop execution
     default:
@@ -228,9 +228,24 @@ let spouse = ["Spouse: "];
 		siblings.push("Not Found");
 		immediateFamily.push(siblings);
 	}
+	
+	
+	
 
 displayFamily(immediateFamily);
+}
 
+function findDescendants(person, people, descendants = []){
+
+	for (let i = 0; i < people.length; i++){
+		for (let j = 0; j < people[i].parents.length; j++){
+			if (person.id == people[i].parents[j]){
+				findDescendants(people[i], people, descendants);
+				descendants.push(people[i].firstName + " " + people[i].lastName);		
+			}
+		}
+	}
+	return descendants;
 }
 
 

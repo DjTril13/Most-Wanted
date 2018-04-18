@@ -1,14 +1,3 @@
-/*
-Build all of your functions for displaying and gathering information below (GUI).
-*/
-
-
-
-
-//calculate age from DOB
-
-// app is the function called to start the entire application
-
 function app(people){
   var searchType = promptFor("Do you know the name of the person you are looking for? Enter 'yes' or 'no'", yesNo).toLowerCase();
   switch(searchType){
@@ -20,17 +9,12 @@ function app(people){
 		break;
     default:
     alert("Wrong! Please try again, following the instructions dummy. :)");
-    app(people); // restart app
-    break;
-  }
-}
+    app(people);
+    break;}}
 
 function searchByTraits(people) {
   let userSearchChoice = prompt("What would you like to search by? 'height', 'weight', 'eye color', 'gender', 'age', 'occupation'.");
   let filteredPeople;
-
- // if (peopleWithTraits is not equal to undefined run this function again with subbing people of with traits instead of people ).   ++++++This is how i want to loop through a second time
-
   switch(userSearchChoice) {
     case "height":
 		filteredPeople = searchByHeight(people);
@@ -62,28 +46,20 @@ else{
   let foundPerson = filteredPeople[0];
   mainMenu(foundPerson, people);}}
 
-
 function displayPeople(people){
   alert(people.map(function(person){return person.firstName + " " + person.lastName;}).join("\n"));
- let searchType = promptFor("Do you see the person your looking for?",yesNo).toLowerCase();
- switch(searchType){
+  let searchType = promptFor("Do you see the person your looking for?",yesNo).toLowerCase();
+  switch(searchType){
     case 'yes':
-    searchByName(people)
+    searchByName(people);
     break;
     case 'no':
     searchByTraits(people);
-    break;
-    // default:
-    // alert("Wrong! Please try again, following the instructions dummy. :)");         !!! THIS DOESNT WORK
-    // app(people); // restart app
-    // break;
-  }
-  return people
-}
-
+    break;}
+    return people}
 
 function searchByWeight(people) {
-  let userInputWeight = prompt("How much does the person weight?");         // I am using this function for testing how to list multiple results
+  let userInputWeight = prompt("How much does the person weight?");
   let newArray = people.filter(function (el){if(el.weight == userInputWeight) {return true}});
   return newArray;}
 
@@ -129,104 +105,60 @@ function searchByAge(people) {
               {newArray.push(people[i]);}}
           return newArray;}
 
-
-
-// function searchByAge2(people){
-//   let userInputAge = prompt("What is the person's age?");
-
-
-// }
-            
-      
-
-
-//  function calculaeDobNumbers(arrayOfStringDates)
-//  {
-//   let arrayOfStringDates = people.map(function(people){return people.dob}); 
-//     for (i = 0; i < arrayOfStringDates.length; i ++)
-//     { let dobArray = arrayOfStringDates[i].split("/");
-//       let dobMonth = parseInt(dobArray[0])
-//       let dobDay = parseInt(dobArray[1])
-//       let dobYear = parseInt(dobArray[2])
-//     }
-
-// function calculateAge(dobMonth,dobYear,dobDay)
-// {
-//       let date = new Date();
-//       let todaysYear = date.getFullYear();
-//       let todaysMonth = date.getMonth();
-//       let todaysDay = date.getDay();
-//       let age
-//       if (todaysMonth > dobMonth) {age = todaysYear - dobYear}
-//         else {if (todaysMonth < dobMonth){age =todaysYear - dobYear - 1}
-//           else {if (todaysDay < dobDay){age =todaysYear - dobYear - 1}
-//             else {age = todaysYear - dobYear}}};  
-//             let arrayAge = [age]
-//             return arrayAge
-// }
-
-
-
-
-
-// Menu function to call once you find who you are looking for
 function mainMenu(person, people){
-  /* Here we pass in the entire person object that we found in our search, as well as the entire original dataset of people. We need people in order to find descendants and other information that the user may want. */
-  if(!person){alert("Could not find that individual.");
-    return app(people);}
+  if(!person){
+    alert("Could not find that individual.");
+    return app(people);
 
   var displayOption = prompt("Found " + person.firstName + " " + person.lastName + " . Do you want to know their 'info', 'family', or 'descendants'? Type the option you want or 'restart' or 'quit'");
   switch(displayOption){
     case "info":
 		displayPerson(person);
-    break;
+		break;
     case "family":
 		findImmediateFamily(person, people);
-    break;
+		break;
     case "descendants":
-    break;
+		let descendantsResults = findDescendants(person, people);
+		displayFamily(descendantsResults);
+		break;
     case "restart":
-    app(people);
-    break;
+		app(people);
+		break;
     case "quit":
     return;
     default:
-    return mainMenu(person, people);
-  }}
+    return mainMenu(person, people);}}
 
 function searchByName(people){
 var userFirstName = promptFor("What is the person's first name?", chars);
 var userLastName = promptFor("What is the person's last name?", chars);
 	let newArray = people.filter(function (el){
 		if ((el.firstName == userFirstName) && (el.lastName == userLastName)) {
-			return true;
-		}
-		//could be typed lowercase/no results found
-	});
-	mainMenu(newArray[0], people);
-}
-//*******************************************************
-function findImmediateFamily (person, people){
-//return persons immediate family - just full names
-// spouse => if then statement
-// siblings => match parents arrays with others
-// parents => match parents[i] to el.id
-//children => el.id to parents' arrays (done?)
+			return true;}});
 
+	mainMenu(newArray[0], people);}
+
+function findImmediateFamily (person, people){
 let immediateFamily = [];
-let children = [];
-let siblings = [];
-let parents = [];
-let spouse;
+let children = ["Children: "];
+let siblings = ["Siblings: "];
+let parents = ["Parents: "];
+let spouse = ["Spouse: "];
 	if (person.currentSpouse !== null){
 		for (let i = 0; i < people.length; i++){
-			if (person.currentSpouse == people.id[i]){
+			if (person.currentSpouse == people[i].id){
+				spouse.push(people[i].firstName + " " + people[i].lastName);
 				
 				break;
 			}
 		}
+		immediateFamily.push(spouse);
+	} else {
+		spouse.push("Not Found");
+		immediateFamily.push(spouse);
 	}
-
+	
 	for (let i = 0; i < people.length; i++){
 		for (let j = 0; j < people[i].parents.length; j++){
 			if (people[i].parents[j] == undefined){
@@ -234,70 +166,109 @@ let spouse;
 			} else {
 				if (person.id == people[i].parents[j]) {
 					children.push(people[i].firstName + " " + people[i].lastName);
-					console.log(children);
 				}
 			}
 		}
 	}
+	
+	if (children.length > 1){
+		immediateFamily.push(children);
+	} else {
+		children.push("Not Found");
+		immediateFamily.push(children);
+	}
+	
+	if (person.parents !== undefined){
+		for (let i = 0; i < person.parents.length; i++){
+			for (let j = 0; j < people[i].parents.length; j++){
+				if (person.parents[j] == people[i].id){
+					parents.push(people[j].firstName + " " + people[j].lastName);
+				}
+			}
+		}
+		immediateFamily.push(parents);
+	} else {
+		parents.push("Not Found");
+		immediateFamily.push(parents);
+	}
+	
+	if (person.parents !== undefined){
+		for (let i = 0; i < person.parents.length; i++){
+			for (let j = 0; j < people.length; j++){
+				if ((person.parents[i] == people[j].parents[i]) && (person.id !== people[j].id) ){
+					siblings.push(people[j].firstName + " " + people[j].lastName);
+				}
+			}
+		}
+		//this next line is to remove duplicates, as it is currently being looped twice for people with 2 parents listed
+		//there should be a better way to solve this
+		siblings = siblings.filter(function (x, y){return siblings.indexOf(x) == y;});
+		immediateFamily.push(siblings);
+	} else {
+		siblings.push("Not Found");
+		immediateFamily.push(siblings);
+	}
+	
+	
+	
 
-	
-	
-displayFamily(children);
+displayFamily(immediateFamily);
+}
+
+function findDescendants(person, people, descendants = []){
+
+	for (let i = 0; i < people.length; i++){
+		for (let j = 0; j < people[i].parents.length; j++){
+			if (person.id == people[i].parents[j]){
+				findDescendants(people[i], people, descendants);
+				descendants.push(people[i].firstName + " " + people[i].lastName);		
+			}
+		}
+	}
+	return descendants;
 }
 
 
-//need another prompt for display family??
-function displayFamily(people){
-  alert(people.join("\n"));
-}
-//***************************************************************
+function displayFamily(people){alert(people.join("\n"));}
 
+function displayPeople(people){alert(people.map(function(person){
+    return person.firstName + " " + person.lastName;}).join("\n"));}
 
-// // alerts a list of people
-// function displayPeople(people){
-//   alert(people.map(function(person){
-//     return person.firstName + " " + person.lastName;
-//   }).join("\n"));
-// }
-
-// alerts a list of people
-
+function displayPeople(people){
+  alert(people.map(function(person){return person.firstName + " " + person.lastName;}).join("\n"));
+let searchType = promptFor("Do you see the person your looking for?",yesNo).toLowerCase();
+ switch(searchType){
+    case 'yes':
+    searchByName(people)
+    break;
+    case 'no':
+    searchByTraits(people);
+    break;
+    default:
+    alert("Wrong! Please try again, following the instructions dummy. :)");
+    app(people);
+    break;}}
 
 function displayPerson(person){
   var personInfo = "First Name: " + person.firstName + "\n";
-     personInfo += "Last Name: " + person.lastName + "\n";
-    personInfo += "Gender: " + person.gender + "\n";
-    personInfo += "Weight: " + person.weight + "\n";
-    personInfo += "Age: " + person.dob + "\n";
-    personInfo += "Eye Color : " + person.eyeColor + "\n";
-    personInfo += "Occupation: " + person.occupation + "\n";
-
-  alert(personInfo);
-}
+      personInfo += "Last Name: " + person.lastName + "\n";
+      personInfo += "Gender: " + person.gender + "\n";
+      personInfo += "Weight: " + person.weight + "\n";
+      personInfo += "Age: " + person.dob + "\n";
+      personInfo += "Eye Color : " + person.eyeColor + "\n";
+      personInfo += "Occupation: " + person.occupation + "\n";
+      alert(personInfo);}
 
 function resultsNotFound(people){
 	let userError = promptFor("The Criteria you have entered could not be found, Would you like to return to the previous screen?", yesNo).toLowerCase();
-	if (userError == "yes"){
-		return;
-	}
-	else{
-		app(people);
-	}
-}
-// function that prompts and validates user input
+	if (userError == "yes"){return;}
+	else {app(people);}}
+
 function promptFor(question, valid){
-  do{
-    var response = prompt(question).trim();
-  } while(!response || !valid(response));
-  return response;
-}
+  do {var response = prompt(question).trim();} 
+  while(!response || !valid(response));
+  return response;}
 
-// helper function to pass into promptFor to validate yes/no answers
-function yesNo(input){
-  return input.toLowerCase() == "yes" || input.toLowerCase() == "no";
-}
+function yesNo(input){return input.toLowerCase() == "yes" || input.toLowerCase() == "no";}
 
-// // helper function to pass in as default promptFor validation
-function chars(input){
-  return true; // default validation only
-}
+function chars(input){return true;}

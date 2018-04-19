@@ -15,7 +15,6 @@ function app(people){
 function searchByTraits(people) {
   let filteredPeople = people;
   let userSearchChoice = prompt("What would you like to search by? 'height', 'weight', 'eye color', 'gender', 'age', 'occupation'. Please list, separated by commas, without spaces").split(",");
-  //let functionOptions = ["height":searchByHeight(people),"weight":searchByWeight(people),"eye color":searchByEyeColor(people),"gender":searchByGender(people),"age":searchByAge(people),"occupation":searchByOccupation(people)]
   for(let i = 0; i < userSearchChoice.length; i++)
   {filteredPeople = switchTraits(userSearchChoice[i].trim(),filteredPeople)}
 
@@ -65,13 +64,14 @@ function displayPeople(people){
     return people}
 
 function searchByWeight(people) {
-  let userInputWeight = prompt("How much does the person weight?");
+  let userInputWeight = checkForNumberInput("How much does the person weigh?", chars);
   let newArray = people.filter(function (el){if(el.weight == userInputWeight) {return true}});
   return newArray;}
 
 function searchByHeight(people) {
-  let userInputHeight = prompt("What is the person's height?");
+  let userInputHeight = checkForNumberInput("What is the person's height?", chars);
   let newArray = people.filter(function (el) {if(el.height == userInputHeight){return true}});
+	
   return newArray;}
 
 function searchByOccupation(people) {
@@ -80,7 +80,7 @@ function searchByOccupation(people) {
   return newArray;}
 
 function searchByEyeColor(people) {
-  let userInputEyeColor = prompt("What is the person's eye color?");                            // SHOULD all these functions be combined into one since they all do nearly the same thing. 
+  let userInputEyeColor = prompt("What is the person's eye color?");
   let newArray = people.filter(function (el){if(el.eyeColor == userInputEyeColor){return true}});
   return newArray;}
 
@@ -88,29 +88,6 @@ function searchByGender(people) {
   let userInputGender = prompt("What is the person's gender?");
   let newArray = people.filter(function (el) {if(el.gender == userInputGender) {return true;}});
   return newArray;}
-
-// function searchByAge(people) {
-//   let newArray = []
-//   let userInputAge = prompt("What is the person's age?");
-//   let arrayOfStringDates = people.map(function(people){return people.dob}); 
-//   for (let i = 0; i < arrayOfStringDates.length; i ++)
-//     { let dobArray = arrayOfStringDates[i].split("/");
-//       let dobMonth = parseInt(dobArray[0])
-//       let dobDay = parseInt(dobArray[1])
-//       let dobYear = parseInt(dobArray[2])
-//       let date = new Date();
-//       let todaysYear = date.getFullYear();
-//       let todaysMonth = date.getMonth();
-//       let todaysDay = date.getDay();
-//       let age
-//       if (todaysMonth > dobMonth) {age = todaysYear - dobYear}
-//         else {if (todaysMonth < dobMonth){age =todaysYear - dobYear - 1}
-//           else {if (todaysDay < dobDay){age =todaysYear - dobYear - 1}
-//             else {age = todaysYear - dobYear}}};  
-//             if (userInputAge == age)
-//               {newArray.push(people[i]);}}
-//           return newArray;}
-
 
 function searchByAge(people) {
  let userInputAge = prompt("What is the person's age?");
@@ -142,7 +119,7 @@ function mainMenu(person, people){
   if(!person){
     alert("Could not find that individual.");
     return app(people);}
-
+  
   var displayOption = prompt("Found " + person.firstName + " " + person.lastName + " . Do you want to know their 'info', 'family', or 'descendants'? Type the option you want or 'restart' or 'quit'");
   switch(displayOption){
     case "info":
@@ -164,12 +141,12 @@ function mainMenu(person, people){
     return mainMenu(person, people);}}
 
 function searchByName(people){
-var userFirstName = promptFor("What is the person's first name?", chars);
-var userLastName = promptFor("What is the person's last name?", chars);
+var userFirstName = promptFor("What is the person's first name?", chars).toLowerCase();
+var userLastName = promptFor("What is the person's last name?", chars).toLowerCase();
 	let newArray = people.filter(function (el){
-		if ((el.firstName == userFirstName) && (el.lastName == userLastName)) {
+		if ((el.firstName.toLowerCase() == userFirstName) && (el.lastName.toLowerCase() == userLastName)) {
 			return true;}});
-	mainMenu(newArray[0], people);}
+	    mainMenu(newArray[0], people);}
 
 function findImmediateFamily (person, people){
 let immediateFamily = [];
@@ -181,7 +158,6 @@ let spouse = ["Spouse: "];
 		for (let i = 0; i < people.length; i++){
 			if (person.currentSpouse == people[i].id){
 				spouse.push(people[i].firstName + " " + people[i].lastName);
-				
 				break;
 			}
 		}
@@ -191,60 +167,71 @@ let spouse = ["Spouse: "];
 		immediateFamily.push(spouse);
 	}
 	
-	for (let i = 0; i < people.length; i++){
-		for (let j = 0; j < people[i].parents.length; j++){
-			if (people[i].parents[j] == undefined){
-					break;
-			} else {
-				if (person.id == people[i].parents[j]) {
-					children.push(people[i].firstName + " " + people[i].lastName);
-				}
-			}
-		}
-	}
-	
-	if (children.length > 1){
+	let childrenResults = findChildren(person, people);
+	if (childrenResults.length > 0){
+		children.push(childrenResults);
 		immediateFamily.push(children);
 	} else {
 		children.push("Not Found");
 		immediateFamily.push(children);
 	}
-	
-	if (person.parents !== undefined){
-		for (let i = 0; i < person.parents.length; i++){
-			for (let j = 0; j < people[i].parents.length; j++){
-				if (person.parents[j] == people[i].id){
-					parents.push(people[j].firstName + " " + people[j].lastName);
-				}
-			}
-		}
+
+	if (person.parents.length > 0){
+		let parentResults = findParents(person, people);
+		parents.push(parentResults);
 		immediateFamily.push(parents);
 	} else {
 		parents.push("Not Found");
 		immediateFamily.push(parents);
 	}
 	
-	if (person.parents !== undefined){
-		for (let i = 0; i < person.parents.length; i++){
-			for (let j = 0; j < people.length; j++){
-				if ((person.parents[i] == people[j].parents[i]) && (person.id !== people[j].id) ){
-					siblings.push(people[j].firstName + " " + people[j].lastName);
-				}
+	if (person.parents.length > 0){
+		let siblingsResults = findSiblings(person, people);
+			if (siblingsResults.length > 1){
+				siblings.push(siblingsResults);
+				immediateFamily.push(siblings);
+			} else {
+				siblings.push("Not Found");
+				immediateFamily.push(siblings);
 			}
-		}
-		//this next line is to remove duplicates, as it is currently being looped twice for people with 2 parents listed
-		//there should be a better way to solve this
-		siblings = siblings.filter(function (x, y){return siblings.indexOf(x) == y;});
-		immediateFamily.push(siblings);
 	} else {
 		siblings.push("Not Found");
 		immediateFamily.push(siblings);
 	}
-	
-	
-	
 
 displayFamily(immediateFamily);
+}
+
+function findParents(person, people, parents = []){
+	for (let i = 0; i < person.parents.length; i++){
+		let parentToFind = person.parents[i];
+		let foundParents = people.filter(function(el){ return el.id === parentToFind });
+		parents.push(foundParents[0].firstName + " " + foundParents[0].lastName);	
+	}
+	return parents;
+}
+
+function findSiblings(person, people, siblings = []){
+	for (let i = 0; i < person.parents.length; i++){
+		for (let j = 0; j < people.length; j++){
+			if ((person.parents[i] == people[j].parents[i]) && (person.id !== people[j].id) ){
+				siblings.push(people[j].firstName + " " + people[j].lastName);
+			}
+		}
+	}
+	siblings = siblings.filter(function (x, y){return siblings.indexOf(x) == y;});
+	return siblings;
+}
+
+function findChildren(person, people, children = []){
+for (let i = 0; i < people.length; i++){
+	for (let j = 0; j < people[i].parents.length; j++){
+		if (person.id == people[i].parents[j]){
+			children.push(people[i].firstName + " " + people[i].lastName);
+		}
+		}
+	}
+	return children;
 }
 
 function findDescendants(person, people, descendants = []){
@@ -260,7 +247,6 @@ function findDescendants(person, people, descendants = []){
 	return descendants;
 }
 
-
 function displayFamily(people){alert(people.join("\n"));}
 
 function displayPerson(person){
@@ -271,17 +257,29 @@ function displayPerson(person){
       personInfo += "Age: " + person.dob + "\n";
       personInfo += "Eye Color : " + person.eyeColor + "\n";
       personInfo += "Occupation: " + person.occupation + "\n";
-      alert(personInfo);}
-
-function resultsNotFound(people){
-	let userError = promptFor("The Criteria you have entered could not be found, Would you like to return to the previous screen?", yesNo).toLowerCase();
-	if (userError == "yes"){return;}
-	else {app(people);}}
+      alert(personInfo);
+}
 
 function promptFor(question, valid){
   do {var response = prompt(question).trim();} 
   while(!response || !valid(response));
-  return response;}
+  return response;
+}
+
+function checkForNumberInput(question, valid){
+  do{
+    var response = prompt(question).trim();
+	if (isNaN(Number(response))){
+		alert("Please enter a valid number for this criteria");
+		response = false;
+	}else {response = response;}
+  } while(!response || !valid(response));
+  return response;
+}
+
+function yesNo(input){
+  return input.toLowerCase() == "yes" || input.toLowerCase() == "no";
+}
 
 function yesNo(input){return input.toLowerCase() == "yes" || input.toLowerCase() == "no";}
 

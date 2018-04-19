@@ -85,7 +85,7 @@ function searchByEyeColor(people) {
   return newArray;}
 
 function searchByGender(people) {
-  let userInputGender = promptFor("What is the person's gender?", chars);
+  let userInputGender = promptFor("What is the person's gender?", maleFemale).toLowerCase();
   let newArray = people.filter(function (el) {if(el.gender == userInputGender) {return true;}});
   return newArray;}
 
@@ -277,8 +277,8 @@ function checkForNumberInput(question, valid){
   return response;
 }
 
-function yesNo(input){
-  return input.toLowerCase() == "yes" || input.toLowerCase() == "no";
+function maleFemale(input){
+  return input.toLowerCase() == "male" || input.toLowerCase() == "female";
 }
 
 function yesNo(input){return input.toLowerCase() == "yes" || input.toLowerCase() == "no";}

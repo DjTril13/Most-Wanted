@@ -75,22 +75,22 @@ function searchByHeight(people) {
   return newArray;}
 
 function searchByOccupation(people) {
-  let userInputOccupation = prompt("What is the person's occupation?");
+  let userInputOccupation = promptFor("What is the person's occupation?", chars);
   let newArray = people.filter(function (el){if(el.occupation == userInputOccupation){return true}});
   return newArray;}
 
 function searchByEyeColor(people) {
-  let userInputEyeColor = prompt("What is the person's eye color?");
+  let userInputEyeColor = promptFor("What is the person's eye color?", chars);
   let newArray = people.filter(function (el){if(el.eyeColor == userInputEyeColor){return true}});
   return newArray;}
 
 function searchByGender(people) {
-  let userInputGender = prompt("What is the person's gender?");
+  let userInputGender = promptFor("What is the person's gender?", chars);
   let newArray = people.filter(function (el) {if(el.gender == userInputGender) {return true;}});
   return newArray;}
 
 function searchByAge(people) {
- let userInputAge = prompt("What is the person's age?");
+ let userInputAge = checkForNumberInput("What is the person's age?", chars);
  let newArray = [];
  for (i = 0; i < people.length; i ++){
  let age = calculateAge(people);

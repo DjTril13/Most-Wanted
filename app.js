@@ -13,38 +13,44 @@ function app(people){
     break;}}
 
 function searchByTraits(people) {
-  let userSearchChoice = prompt("What would you like to search by? 'height', 'weight', 'eye color', 'gender', 'age', 'occupation'.");
-  let filteredPeople;
-  switch(userSearchChoice) {
-    case "height":
-		filteredPeople = searchByHeight(people);
-		break;
-    case "weight":
-		filteredPeople = searchByWeight(people);
-		break;
-	case "eye color":
-		filteredPeople = searchByEyeColor(people);
-		break;
-	case "gender":
-		filteredPeople = searchByGender(people);
-		break;
-	case "age":
-		filteredPeople = searchByAge(people);
-		break;
-	case "occupation":
-		filteredPeople = searchByOccupation(people);
-		break;
-    default:
-      alert("You entered an invalid search type! Please try again.");
-      searchByTraits(people);
-      break;}
+  let filteredPeople = people;
+  let userSearchChoice = prompt("What would you like to search by? 'height', 'weight', 'eye color', 'gender', 'age', 'occupation'. Please list, separated by commas, without spaces").split(",");
+  //let functionOptions = ["height":searchByHeight(people),"weight":searchByWeight(people),"eye color":searchByEyeColor(people),"gender":searchByGender(people),"age":searchByAge(people),"occupation":searchByOccupation(people)]
+  for(let i = 0; i < userSearchChoice.length; i++)
+  {filteredPeople = switchTraits(userSearchChoice[i].trim(),filteredPeople)}
 
  if (filteredPeople.length > 1){
  displayPeople(filteredPeople);}
 
-else{
-  let foundPerson = filteredPeople[0];
-  mainMenu(foundPerson, people);}}
+else {let foundPerson = filteredPeople[0];
+      mainMenu(foundPerson, people);}}
+
+function  switchTraits (traitSearch, people){
+   let filteredPeople
+   switch(traitSearch) {
+    case "height":
+    filteredPeople = searchByHeight(people);
+    break;
+    case "weight":
+    filteredPeople = searchByWeight(people);
+    break;
+  case "eye color":
+    filteredPeople = searchByEyeColor(people);
+    break;
+  case "gender":
+    filteredPeople = searchByGender(people);
+    break;
+  case "age":
+    filteredPeople = searchByAge(people);
+    break;
+  case "occupation":
+    filteredPeople = searchByOccupation(people);
+    break;
+    default:
+      alert("You entered an invalid search type! Please try again.");
+      searchByTraits(people);
+        break;}
+        return filteredPeople}
 
 function displayPeople(people){
   alert(people.map(function(person){return person.firstName + " " + person.lastName;}).join("\n"));
@@ -83,32 +89,59 @@ function searchByGender(people) {
   let newArray = people.filter(function (el) {if(el.gender == userInputGender) {return true;}});
   return newArray;}
 
+// function searchByAge(people) {
+//   let newArray = []
+//   let userInputAge = prompt("What is the person's age?");
+//   let arrayOfStringDates = people.map(function(people){return people.dob}); 
+//   for (let i = 0; i < arrayOfStringDates.length; i ++)
+//     { let dobArray = arrayOfStringDates[i].split("/");
+//       let dobMonth = parseInt(dobArray[0])
+//       let dobDay = parseInt(dobArray[1])
+//       let dobYear = parseInt(dobArray[2])
+//       let date = new Date();
+//       let todaysYear = date.getFullYear();
+//       let todaysMonth = date.getMonth();
+//       let todaysDay = date.getDay();
+//       let age
+//       if (todaysMonth > dobMonth) {age = todaysYear - dobYear}
+//         else {if (todaysMonth < dobMonth){age =todaysYear - dobYear - 1}
+//           else {if (todaysDay < dobDay){age =todaysYear - dobYear - 1}
+//             else {age = todaysYear - dobYear}}};  
+//             if (userInputAge == age)
+//               {newArray.push(people[i]);}}
+//           return newArray;}
+
+
 function searchByAge(people) {
-  let newArray = []
-  let userInputAge = prompt("What is the person's age?");
-  let arrayOfStringDates = people.map(function(people){return people.dob}); 
-  for (i = 0; i < arrayOfStringDates.length; i ++)
-    { let dobArray = arrayOfStringDates[i].split("/");
-      let dobMonth = parseInt(dobArray[0])
-      let dobDay = parseInt(dobArray[1])
-      let dobYear = parseInt(dobArray[2])
-      let date = new Date();
-      let todaysYear = date.getFullYear();
-      let todaysMonth = date.getMonth();
-      let todaysDay = date.getDay();
-      let age
-      if (todaysMonth > dobMonth) {age = todaysYear - dobYear}
-        else {if (todaysMonth < dobMonth){age =todaysYear - dobYear - 1}
-          else {if (todaysDay < dobDay){age =todaysYear - dobYear - 1}
-            else {age = todaysYear - dobYear}}};  
-            if (userInputAge == age)
-              {newArray.push(people[i]);}}
-          return newArray;}
+ let userInputAge = prompt("What is the person's age?");
+ let newArray = [];
+ for (i = 0; i < people.length; i ++){
+ let age = calculateAge(people);
+ if (userInputAge == age){
+      newArray.push(people[i]);}}
+      return newArray;}
+
+function calculateAge(people){
+ let arrayOfStringDates = people.map(function(people){return people.dob});
+     let dobArray = arrayOfStringDates[i].split("/");
+     let dobMonth = parseInt(dobArray[0])
+     let dobDay = parseInt(dobArray[1])
+     let dobYear = parseInt(dobArray[2])
+     let date = new Date();
+     let todaysYear = date.getFullYear();
+     let todaysMonth = date.getMonth();
+     let todaysDay = date.getDay();
+     let age;
+     if (todaysMonth > dobMonth) {age = todaysYear - dobYear}
+       else {if (todaysMonth < dobMonth){age = todaysYear - dobYear - 1}
+         else {if (todaysDay < dobDay){age = todaysYear - dobYear - 1}
+           else {age = todaysYear - dobYear}}};  
+           return age;}
 
 function mainMenu(person, people){
   if(!person){
     alert("Could not find that individual.");
-    return app(people);
+    return app(people);}
 
   var displayOption = prompt("Found " + person.firstName + " " + person.lastName + " . Do you want to know their 'info', 'family', or 'descendants'? Type the option you want or 'restart' or 'quit'");
   switch(displayOption){
@@ -136,7 +169,6 @@ var userLastName = promptFor("What is the person's last name?", chars);
 	let newArray = people.filter(function (el){
 		if ((el.firstName == userFirstName) && (el.lastName == userLastName)) {
 			return true;}});
-
 	mainMenu(newArray[0], people);}
 
 function findImmediateFamily (person, people){
@@ -230,24 +262,6 @@ function findDescendants(person, people, descendants = []){
 
 
 function displayFamily(people){alert(people.join("\n"));}
-
-function displayPeople(people){alert(people.map(function(person){
-    return person.firstName + " " + person.lastName;}).join("\n"));}
-
-function displayPeople(people){
-  alert(people.map(function(person){return person.firstName + " " + person.lastName;}).join("\n"));
-let searchType = promptFor("Do you see the person your looking for?",yesNo).toLowerCase();
- switch(searchType){
-    case 'yes':
-    searchByName(people)
-    break;
-    case 'no':
-    searchByTraits(people);
-    break;
-    default:
-    alert("Wrong! Please try again, following the instructions dummy. :)");
-    app(people);
-    break;}}
 
 function displayPerson(person){
   var personInfo = "First Name: " + person.firstName + "\n";

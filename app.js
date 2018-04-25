@@ -235,7 +235,7 @@ for (let i = 0; i < people.length; i++){
 }
 
 function findDescendants(person, people, descendants = []){
-
+//refactor
 	for (let i = 0; i < people.length; i++){
 		for (let j = 0; j < people[i].parents.length; j++){
 			if (person.id == people[i].parents[j]){
